@@ -4,4 +4,24 @@
 <h1 class="title">
   Welcome, {{ name }}!
 </h1>
+<br/>
+<div>
+  Available Flights
+</div>
+<div class="content">
+  {% for flight in flights %}
+      <div class="flight">
+          <p><b>#{{ flight.flightCode }}</b></p>
+          <b>
+              <p class="name">From {{ flight.departure }} To {{ flight.arrival }}</p>
+          </b>
+          <p>US$ {{ flight.ticketPrice }}</p>
+          <p>Departs: {{ flight.date }}</p>
+          <div class="bio">
+              <h4>Status</h4>
+              <p>Seats available {{ flight.bio }}</p>
+          </div>
+      </div>
+  {% endfor %}
+</div>
 {% endblock %}
