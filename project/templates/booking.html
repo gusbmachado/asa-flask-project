@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title">
+      Hi, {{name}}. You've reserved a seat for {{flight}}
+    </h1>
+    <br/>
+    <div>
+      Your Reservations
+    </div>
+    <br />
+    <div class="content">
+        <a href="{{ url_for('main.ticket', bookingId=history.bookingId) }}" class="flight">
+            <p><b>#{{ history.flightCode }}</b></p>
+            <b>
+                <p class="name">Passanger: {{ history.name }}</p>
+            </b>
+            <p>ID: {{ history.bookingId }}</p>
+        </a>
+    </div>
+    <div>
+        <!-- Begin alerts -->                
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <script>
+            Swal.fire({
+                title:"{{ category.title() }}!",
+                // success , error , warning ,info
+                text: "{{ message }}",
+                // Custom message flashed from your flask routes
+                icon: "{{ category }}" == "danger" ? "error" : "{{ category }}"
+                // success , error , warning ,info
+            })
+        </script>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <!-- End alerts -->
+    </div>
+
+{% endblock%}
