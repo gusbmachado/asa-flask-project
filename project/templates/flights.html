@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="title">
+    Welcome, {{ name }}!
+  </h1>
+  <br/>
+  <div class="container">
+  <ul class="breadcrumb">
+  <li class="1 breadcrumb__item breadcrumb__item__selected" onclick="change(this);">
+  <span class="breadcrumb__inner">
+  <span class="breadcrumb__title">Available Flights</span>
+  </span>
+  </li>
+  <li class="2 breadcrumb__item breadcrumb__item__unselected" onclick="change(this);">
+  <span class="breadcrumb__inner">
+  <span class="breadcrumb__title">Flights Connections</span>
+  </span>
+  </li>
+  <li class="3 breadcrumb__item breadcrumb__item__unselected" onclick="change(this);">
+  <span class="breadcrumb__inner">
+  <span class="breadcrumb__title">Airports</span>
+  </span>
+  </li>
+  <li class="4 breadcrumb__item breadcrumb__item__unselected" onclick="change(this);">
+  <span class="breadcrumb__inner">
+  <span class="breadcrumb__title">Schedules</span>
+  </span>
+  </li>
+  </ul>
+  </div>
+  <script>
+    function change(item){
+        document.getElementsByClassName('breadcrumb__item__selected')[0].classList.add('breadcrumb__item__unselected');
+        document.getElementsByClassName('breadcrumb__item__selected')[0].classList.remove('breadcrumb__item__selected');
+        item.classList.replace('breadcrumb__item__unselected', 'breadcrumb__item__selected');
+        for (var i=1; i <= 4; i++) {
+          document.getElementById(i).classList.remove('show');
+          document.getElementById(i).classList.add('hide');
+          if (i == item.classList[0]) document.getElementById(i).classList.replace('hide', 'show');
+        }
+        console.log(item.classList[0]);
+    }
+    </script>
+  <br />
+  <div id="1" class="content show">
+  {% for flight in flights %}
+      <a href="{{ url_for('main.dashboard', name=name, flight=flight.flightCode) }}" class="flight">
+          <p><b>#{{ flight.flightCode }}</b></p>
+          <b>
+              <p class="name">From {{ flight.departure }} To {{ flight.arrival }}</p>
+          </b>
+          <p>US$ {{ flight.ticketPrice }}</p>
+          <p>Departs: {{ flight.date }}</p>
+          <div class="bio">
+              <h4>Status</h4>
+              <p>Seats available {{ flight.bio }}</p>
+          </div>
+      </a>
+  {% endfor %}
+</div>
+<br />
+<div id="2" class="hide">
+  {% for trip in trips %}
+  <div class="flight">
+    <b>
+      <p class="name">From {{ trip.departure }} To {{ trip.arrival }}</p>
+    </b>
+  </div>
+  {% endfor %}
+</div>
+<br />
+<div id="3" class="hide">
+  {% for airport in airports %}
+  <div class="flight">
+    <b>
+      <p class="name">{{ airport[0] }}</p>
+    </b>
+  </div>
+  {% endfor %}
+</div>
+<br />
+<div id="4" class="hide">
+  {% for flight in flightsTime %}
+  <div class="flight">
+    <b>
+      <p class="name">Flight {{ flight[0] }} departs {{ flight[1] }}</p>
+    </b>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
