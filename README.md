@@ -1,7 +1,5 @@
 # Projeto Final - Arquitetura de Software
 
-    pip install -r requirements.txt
     python3 createdb.py
-    export FLASK_APP=project
-    export FLASK_DEBUG=1
-    flask run
+    docker build -t python-docker .
+    docker run -dp 5000:5000 asa-project
