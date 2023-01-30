@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title">
+      Your reservation for flight {{flightCode}} has been cancelled
+    </h1>
+    <br/>
+    <div>
+      Back to Passages Page
+    </div>
+    <br />
+    <div>
+        <a class="btn" href="{{ url_for('main.flights') }}">Back</a>
+    </div>
+
+{% endblock%}
