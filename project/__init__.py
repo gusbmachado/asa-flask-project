@@ -20,9 +20,6 @@ def create_app():
 
 	from .models import User
 
-	from .models import Flight
-	Flight.create_tables()
-
 	@login_manager.user_loader
 	def load_user(user_id):
 		# since the user_id is just the primary key of our user table, use it in the query for the user
