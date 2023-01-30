@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title">
+      Your Tickets
+    </h1>
+    <br />
+    <div class="content">
+        {% for t in tickets %}
+        <div class="flight">
+            <p><b>#{{ t.flightCode }}</b></p>
+            <b>
+                <p class="name">Passanger: {{ t.name }}</p>
+                <p class="name">Seat: {{ t.seat }}</p>
+            </b>
+            <p>ID: {{ t.ticketNumber }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+{% endblock%}

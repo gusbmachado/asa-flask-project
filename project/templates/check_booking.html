@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title">
+      Your Reservations
+    </h1>
+    <br />
+    <div class="content">
+        {% for h in history %}
+        <a href="{{ url_for('main.cancel', flightCode=h.flightCode, bookingId=h.bookingId) }}">X</a>
+        <a href="{{ url_for('main.ticket', bookingId=h.bookingId) }}" class="flight">
+            <p><b>#{{ h.flightCode }}</b></p>
+            <b>
+                <p class="name">Passanger: {{ h.name }}</p>
+            </b>
+            <p>ID: {{ h.bookingId }}</p>
+        </a>
+        {% endfor %}
+    </div>
+
+{% endblock%}
