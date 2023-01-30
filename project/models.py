@@ -1,5 +1,7 @@
 import uuid
 import sqlite3
+import random
+from flask import flash
 from datetime import datetime
 from dateutil import parser
 from flask_login import UserMixin
@@ -109,17 +111,69 @@ class Booking(db.Model):
 			Base.metadata.create_all(engine)
 			
 			try:
-				# con.execute('UPDATE flight SET passengers=%d WHERE flightCode="%s"' % (book[0][5] + 1, book[0][1]))
-				# for c in session.query(Flight).all():
-				# 	c.passengers += 1
-				# session.commit()
+				for c in session.query(Flight).all():
+					if c.flightCode == flight:
+						c.passengers += 1
+				session.commit()
 
 				session.add(Booking(name=name, flightCode=flight, bookingId=str(uuid.uuid4())))
 				session.commit()
 			finally:
 				session.close()
+		else:
+			flash(f"There're no more seats!", "error")
+
+	def book_history():
+		conn = sqlite3.connect('project/db.sqlite')
+		conn.row_factory = sqlite3.Row
+		history = conn.execute('SELECT * FROM booking').fetchall()
+		conn.close()
+
+		return history
+
+	def book_cancel(flightCode, bookingId):
+		Base.metadata.create_all(engine)			
+		try:
+			x = Booking.query.filter_by(bookingId=bookingId).first()
+			current_db_sessions = session.object_session(x)
+			current_db_sessions.delete(x)
+			current_db_sessions.commit()
+			current_db_sessions.close()
+			for c in session.query(Flight).all():
+				if c.flightCode == flightCode:
+					c.passengers -= 1
+			session.commit()
+		finally:
+			session.close()
 
 class Ticket(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	ticketNumber = db.Column(db.Integer, unique=True)
+	name = db.Column(db.String(1000))
+	flightCode = db.Column(db.String(100))
 	seat = db.Column(db.String(10), unique=True)
+	ticketNumber = db.Column(db.Integer, unique=True)
+
+	def set_ticket(bookingId):
+		con = sqlite3.connect('project/db.sqlite')
+		name = con.execute('SELECT name from booking WHERE bookingId="%s"' % bookingId).fetchall()
+		flight = con.execute('SELECT flightCode from booking WHERE bookingId="%s"' % bookingId).fetchall()
+
+		row = random.randint(1, 68)
+		place = chr(random.randint(ord('A'), ord('F')))
+		seat = str(row) + " " + place
+
+		Base.metadata.create_all(engine)
+
+		try:
+			session.add(Ticket(name=name[0][0], flightCode=flight[0][0], ticketNumber=str(uuid.uuid4()), seat=seat))
+			session.commit()
+		finally:
+			session.close()
+
+	def get_ticket():
+		conn = sqlite3.connect('project/db.sqlite')
+		conn.row_factory = sqlite3.Row
+		tickets = conn.execute('SELECT * FROM ticket').fetchall()
+		conn.close()
+
+		return tickets
