@@ -1,0 +1,33 @@
+version: "3.6"
+services:
+  asa_project:
+    command:
+      - "python3"
+      - "-m"
+      - "flask"
+      - "run"
+      - "--host=0.0.0.0"
+    container_name: "asa_project"
+    environment:
+      - "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "LANG=C.UTF-8"
+      - "GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568"
+      - "PYTHON_VERSION=3.8.16"
+      - "PYTHON_PIP_VERSION=22.0.4"
+      - "PYTHON_SETUPTOOLS_VERSION=57.5.0"
+      - "PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/66030fa03382b4914d4c4d0896961a0bdeeeb274/public/get-pip.py"
+      - "PYTHON_GET_PIP_SHA256=1e501cf004eac1b7eb1f97266d28f995ae835d30250bec7f8850562703067dc6"
+      - "FLASK_APP=project"
+      - "FLASK_ENV=development"
+      - "FLASK_DEBUG=1"
+    hostname: "d1962911575b"
+    image: "asa-flask-project"
+    ipc: "private"
+    logging:
+      driver: "json-file"
+      options: {}
+    mac_address: "02:42:ac:11:00:02"
+    network_mode: "bridge"
+    ports:
+      - "5000:5000/tcp"
+    working_dir: "/asa-flask-project"
